@@ -1,0 +1,520 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="lowes_catalogModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categories">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="collections">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="roomType" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="imageUrl" Type="varchar" MaxLength="1024" />
+        </EntityType>
+        <EntityType Name="collections_groups">
+          <Key>
+            <PropertyRef Name="collectionId" />
+            <PropertyRef Name="groupId" />
+          </Key>
+          <Property Name="collectionId" Type="int" Nullable="false" />
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="isDefault" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="groups">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="marketingBullets" Type="longtext" />
+          <Property Name="imageUrl" Type="varchar" MaxLength="255" />
+          <Property Name="color" Type="varchar" MaxLength="128" />
+          <Property Name="material" Type="varchar" MaxLength="128" />
+          <Property Name="size" Type="varchar" MaxLength="128" />
+          <Property Name="Finish" Type="varchar" MaxLength="128" />
+          <Property Name="roomType" Type="varchar" MaxLength="20" />
+          <Property Name="category" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="spatialCategory" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="isEnabled" Type="bool" Nullable="false" />
+          <Property Name="unitPrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="unit" Type="varchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="groups_products">
+          <Key>
+            <PropertyRef Name="groupId" />
+            <PropertyRef Name="productId" />
+          </Key>
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="productId" Type="varchar" MaxLength="16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="productId" />
+          </Key>
+          <Property Name="productId" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="itemNumber" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="modelId" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="networkPrice" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="roomtypes">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="spatialcategories">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__collections__roomTypes">
+          <End Role="roomtypes" Type="Self.roomtypes" Multiplicity="1" />
+          <End Role="collections" Type="Self.collections" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roomtypes">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="collections">
+              <PropertyRef Name="roomType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collections_groups__collections">
+          <End Role="collections" Type="Self.collections" Multiplicity="1" />
+          <End Role="collections_groups" Type="Self.collections_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="collections">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collections_groups">
+              <PropertyRef Name="collectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collections_groups__groups">
+          <End Role="groups" Type="Self.groups" Multiplicity="1" />
+          <End Role="collections_groups" Type="Self.collections_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="groups">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collections_groups">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups__categories">
+          <End Role="categories" Type="Self.categories" Multiplicity="1" />
+          <End Role="groups" Type="Self.groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups__roomTypes">
+          <End Role="roomtypes" Type="Self.roomtypes" Multiplicity="0..1" />
+          <End Role="groups" Type="Self.groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roomtypes">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="roomType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups__spatialCategories">
+          <End Role="spatialcategories" Type="Self.spatialcategories" Multiplicity="1" />
+          <End Role="groups" Type="Self.groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="spatialcategories">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="spatialCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups_products__groups">
+          <End Role="groups" Type="Self.groups" Multiplicity="1" />
+          <End Role="groups_products" Type="Self.groups_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="groups">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="groups_products">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups_products__products">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="groups_products" Type="Self.groups_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="productId" />
+            </Principal>
+            <Dependent Role="groups_products">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="lowes_catalogModelStoreContainer">
+          <EntitySet Name="categories" EntityType="Self.categories" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="collections" EntityType="Self.collections" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="collections_groups" EntityType="Self.collections_groups" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="groups" EntityType="Self.groups" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="groups_products" EntityType="Self.groups_products" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="products" EntityType="Self.products" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="roomtypes" EntityType="Self.roomtypes" Schema="lowes_catalog" store:Type="Tables" />
+          <EntitySet Name="spatialcategories" EntityType="Self.spatialcategories" Schema="lowes_catalog" store:Type="Tables" />
+          <AssociationSet Name="FK__collections__roomTypes" Association="Self.FK__collections__roomTypes">
+            <End Role="roomtypes" EntitySet="roomtypes" />
+            <End Role="collections" EntitySet="collections" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collections_groups__collections" Association="Self.FK__collections_groups__collections">
+            <End Role="collections" EntitySet="collections" />
+            <End Role="collections_groups" EntitySet="collections_groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collections_groups__groups" Association="Self.FK__collections_groups__groups">
+            <End Role="groups" EntitySet="groups" />
+            <End Role="collections_groups" EntitySet="collections_groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups__categories" Association="Self.FK__groups__categories">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups__roomTypes" Association="Self.FK__groups__roomTypes">
+            <End Role="roomtypes" EntitySet="roomtypes" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups__spatialCategories" Association="Self.FK__groups__spatialCategories">
+            <End Role="spatialcategories" EntitySet="spatialcategories" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups_products__groups" Association="Self.FK__groups_products__groups">
+            <End Role="groups" EntitySet="groups" />
+            <End Role="groups_products" EntitySet="groups_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups_products__products" Association="Self.FK__groups_products__products">
+            <End Role="products" EntitySet="products" />
+            <End Role="groups_products" EntitySet="groups_products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="lowes_catalogModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="groups" Relationship="Self.FK__groups__categories" FromRole="categories" ToRole="groups" />
+        </EntityType>
+        <EntityType Name="collection">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="roomType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="imageUrl" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="roomtype1" Relationship="Self.FK__collections__roomTypes" FromRole="collections" ToRole="roomtypes" />
+          <NavigationProperty Name="collections_groups" Relationship="Self.FK__collections_groups__collections" FromRole="collections" ToRole="collections_groups" />
+        </EntityType>
+        <EntityType Name="collections_groups">
+          <Key>
+            <PropertyRef Name="collectionId" />
+            <PropertyRef Name="groupId" />
+          </Key>
+          <Property Name="collectionId" Type="Int32" Nullable="false" />
+          <Property Name="groupId" Type="Int32" Nullable="false" />
+          <Property Name="isDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="collection" Relationship="Self.FK__collections_groups__collections" FromRole="collections_groups" ToRole="collections" />
+          <NavigationProperty Name="group" Relationship="Self.FK__collections_groups__groups" FromRole="collections_groups" ToRole="groups" />
+        </EntityType>
+        <EntityType Name="group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="marketingBullets" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="imageUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="color" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="material" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="size" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Finish" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="roomType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="category" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="spatialCategory" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="unitPrice" Type="Decimal" />
+          <Property Name="unit" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="category1" Relationship="Self.FK__groups__categories" FromRole="groups" ToRole="categories" />
+          <NavigationProperty Name="collections_groups" Relationship="Self.FK__collections_groups__groups" FromRole="groups" ToRole="collections_groups" />
+          <NavigationProperty Name="roomtype1" Relationship="Self.FK__groups__roomTypes" FromRole="groups" ToRole="roomtypes" />
+          <NavigationProperty Name="spatialcategory1" Relationship="Self.FK__groups__spatialCategories" FromRole="groups" ToRole="spatialcategories" />
+          <NavigationProperty Name="products" Relationship="Self.groups_products" FromRole="groups" ToRole="products" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="productId" />
+          </Key>
+          <Property Name="productId" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="itemNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="modelId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="networkPrice" Type="Decimal" />
+          <NavigationProperty Name="groups" Relationship="Self.groups_products" FromRole="products" ToRole="groups" />
+        </EntityType>
+        <EntityType Name="roomtype">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="collections" Relationship="Self.FK__collections__roomTypes" FromRole="roomtypes" ToRole="collections" />
+          <NavigationProperty Name="groups" Relationship="Self.FK__groups__roomTypes" FromRole="roomtypes" ToRole="groups" />
+        </EntityType>
+        <EntityType Name="spatialcategory">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="groups" Relationship="Self.FK__groups__spatialCategories" FromRole="spatialcategories" ToRole="groups" />
+        </EntityType>
+        <Association Name="FK__groups__categories">
+          <End Role="categories" Type="Self.category" Multiplicity="1" />
+          <End Role="groups" Type="Self.group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collections__roomTypes">
+          <End Role="roomtypes" Type="Self.roomtype" Multiplicity="1" />
+          <End Role="collections" Type="Self.collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roomtypes">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="collections">
+              <PropertyRef Name="roomType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collections_groups__collections">
+          <End Role="collections" Type="Self.collection" Multiplicity="1" />
+          <End Role="collections_groups" Type="Self.collections_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="collections">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collections_groups">
+              <PropertyRef Name="collectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collections_groups__groups">
+          <End Role="groups" Type="Self.group" Multiplicity="1" />
+          <End Role="collections_groups" Type="Self.collections_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="groups">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collections_groups">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups__roomTypes">
+          <End Role="roomtypes" Type="Self.roomtype" Multiplicity="0..1" />
+          <End Role="groups" Type="Self.group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roomtypes">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="roomType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__groups__spatialCategories">
+          <End Role="spatialcategories" Type="Self.spatialcategory" Multiplicity="1" />
+          <End Role="groups" Type="Self.group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="spatialcategories">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="groups">
+              <PropertyRef Name="spatialCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="groups_products">
+          <End Role="groups" Type="Self.group" Multiplicity="*" />
+          <End Role="products" Type="Self.product" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="lowes_catalogEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="collections" EntityType="Self.collection" />
+          <EntitySet Name="collections_groups" EntityType="Self.collections_groups" />
+          <EntitySet Name="groups" EntityType="Self.group" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="roomtypes" EntityType="Self.roomtype" />
+          <EntitySet Name="spatialcategories" EntityType="Self.spatialcategory" />
+          <AssociationSet Name="FK__groups__categories" Association="Self.FK__groups__categories">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collections__roomTypes" Association="Self.FK__collections__roomTypes">
+            <End Role="roomtypes" EntitySet="roomtypes" />
+            <End Role="collections" EntitySet="collections" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collections_groups__collections" Association="Self.FK__collections_groups__collections">
+            <End Role="collections" EntitySet="collections" />
+            <End Role="collections_groups" EntitySet="collections_groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collections_groups__groups" Association="Self.FK__collections_groups__groups">
+            <End Role="groups" EntitySet="groups" />
+            <End Role="collections_groups" EntitySet="collections_groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups__roomTypes" Association="Self.FK__groups__roomTypes">
+            <End Role="roomtypes" EntitySet="roomtypes" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__groups__spatialCategories" Association="Self.FK__groups__spatialCategories">
+            <End Role="spatialcategories" EntitySet="spatialcategories" />
+            <End Role="groups" EntitySet="groups" />
+          </AssociationSet>
+          <AssociationSet Name="groups_products" Association="Self.groups_products">
+            <End Role="groups" EntitySet="groups" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="lowes_catalogModelStoreContainer" CdmEntityContainer="lowes_catalogEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="lowes_catalogModel.category">
+              <MappingFragment StoreEntitySet="categories">
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="collections">
+            <EntityTypeMapping TypeName="lowes_catalogModel.collection">
+              <MappingFragment StoreEntitySet="collections">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="roomType" ColumnName="roomType" />
+                <ScalarProperty Name="imageUrl" ColumnName="imageUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="collections_groups">
+            <EntityTypeMapping TypeName="lowes_catalogModel.collections_groups">
+              <MappingFragment StoreEntitySet="collections_groups">
+                <ScalarProperty Name="collectionId" ColumnName="collectionId" />
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="isDefault" ColumnName="isDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="groups">
+            <EntityTypeMapping TypeName="lowes_catalogModel.group">
+              <MappingFragment StoreEntitySet="groups">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="marketingBullets" ColumnName="marketingBullets" />
+                <ScalarProperty Name="imageUrl" ColumnName="imageUrl" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="material" ColumnName="material" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="Finish" ColumnName="Finish" />
+                <ScalarProperty Name="roomType" ColumnName="roomType" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="spatialCategory" ColumnName="spatialCategory" />
+                <ScalarProperty Name="isEnabled" ColumnName="isEnabled" />
+                <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="lowes_catalogModel.product">
+              <MappingFragment StoreEntitySet="products">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="itemNumber" ColumnName="itemNumber" />
+                <ScalarProperty Name="modelId" ColumnName="modelId" />
+                <ScalarProperty Name="networkPrice" ColumnName="networkPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roomtypes">
+            <EntityTypeMapping TypeName="lowes_catalogModel.roomtype">
+              <MappingFragment StoreEntitySet="roomtypes">
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spatialcategories">
+            <EntityTypeMapping TypeName="lowes_catalogModel.spatialcategory">
+              <MappingFragment StoreEntitySet="spatialcategories">
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="groups_products" TypeName="lowes_catalogModel.groups_products" StoreEntitySet="groups_products">
+            <EndProperty Name="groups">
+              <ScalarProperty Name="id" ColumnName="groupId" />
+            </EndProperty>
+            <EndProperty Name="products">
+              <ScalarProperty Name="productId" ColumnName="productId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

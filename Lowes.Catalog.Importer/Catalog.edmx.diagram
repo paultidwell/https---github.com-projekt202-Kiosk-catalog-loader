@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="db667f795fe74e9aac3e7b19ad10065d" Name="Diagram1">
+        <EntityTypeShape EntityType="lowes_catalogModel.category" Width="1.5" PointX="0.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.collection" Width="1.5" PointX="0.625" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.collections_groups" Width="1.5" PointX="5.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.group" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.product" Width="1.5" PointX="5.625" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.roomtype" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="lowes_catalogModel.spatialcategory" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
+        <AssociationConnector Association="lowes_catalogModel.FK__groups__categories" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.FK__collections__roomTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.FK__collections_groups__collections" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.FK__collections_groups__groups" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.FK__groups__roomTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.FK__groups__spatialCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="lowes_catalogModel.groups_products" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
